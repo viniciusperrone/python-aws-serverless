@@ -37,6 +37,10 @@ celerybeat-schedule
 instance/
 .webassets-cache
 
+# Env
+.env
+!.env.example
+
 # Pyre type checker
 .pyre/
 
