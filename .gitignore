@@ -1,0 +1,80 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.pyenv/
+pipenv/
+.Python
+celerybeat-schedule
+instance/
+.webassets-cache
+
+# Pyre type checker
+.pyre/
+
+# Pytest
+.pytest_cache/
+coverage.xml
+.tox/
+.nox/
+
+# Flask/Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+instance/
+.webassets-cache
+.pybuild/
+env.bak/
+env/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Other IDEs and editors
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
