@@ -24,8 +24,10 @@ try:
     )
 
     sg_id = response_sg['GroupId']
+
 except Exception as err:
-    print('This security group already exists!')
+    print("This security group already exist!")
+
     response_group_sg = client_ec2.describe_security_groups(
         GroupNames=['sg_web']
     )
