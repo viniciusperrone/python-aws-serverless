@@ -16,54 +16,62 @@ session = boto3.Session(profile_name=profile_name, region_name=region_name)
 
 client_ec2 = session.client('ec2')
 
-try:
-    response_sg = client_ec2.create_security_group(
-        Description='New sg',
-        GroupName='sg_web',
-        VpcId=vpc_id
-    )
+def get_sg_id() -> str:
+    try:
+        response_sg = client_ec2.create_security_group(
+            Description='New sg',
+            GroupName='sg_web',
+            VpcId=vpc_id
+        )
 
-    sg_id = response_sg['GroupId']
+        sg_id = response_sg['GroupId']
 
-except Exception as err:
-    print("This security group already exist!")
+    except Exception as err:
+        print("This security group already exist!")
 
-    response_group_sg = client_ec2.describe_security_groups(
-        GroupNames=['sg_web']
-    )
+        response_group_sg = client_ec2.describe_security_groups(
+            GroupNames=['sg_web']
+        )
 
-    sg_id = response_group_sg['SecurityGroups'][0]['GroupId']
+        sg_id = response_group_sg['SecurityGroups'][0]['GroupId']
+
+    return sg_id
+
+def add_ingress_rules(sg_id: str):
+    try:
+        response_ingress = client_ec2.authorize_security_group_ingress(
+            GroupId=sg_id,
+            IpPermissions=[
+                {
+                    'FromPort': 22,
+                    'ToPort': 22,
+                    'IpProtocol': 'tcp',
+                    'IpRanges': [
+                        {
+                            'CidrIp': '0.0.0.0/0',
+                            'Description': 'Access SSH'
+                        }
+                    ]
+                },
+                {
+                    'FromPort': 80,
+                    'ToPort': 80,
+                    'IpProtocol': 'tcp',
+                    'IpRanges': [
+                        {
+                            'CidrIp': '0.0.0.0/0',
+                            'Description': 'Access HTTP'
+                        }
+                    ]
+                }
+            ]
+        )
+    except Exception as err:
+        print(err)
 
 
-try:
-    response_ingress = client_ec2.authorize_security_group_ingress(
-        GroupId=sg_id,
-        IpPermissions=[
-            {
-                'FromPort': 22,
-                'ToPort': 22,
-                'IpProtocol': 'tcp',
-                'IpRanges': [
-                    {
-                        'CidrIp': '0.0.0.0/0',
-                        'Description': 'Access SSH'
-                    }
-                ]
-            },
-            {
-                'FromPort': 80,
-                'ToPort': 80,
-                'IpProtocol': 'tcp',
-                'IpRanges': [
-                    {
-                        'CidrIp': '0.0.0.0/0',
-                        'Description': 'Access HTTP'
-                    }
-                ]
-            }
-        ]
-    )
+    return
 
-    print(response_ingress)
-except Exception as err:
-    print(err)
+sg_id = get_sg_id()
+
+add_ingress_rules(sg_id)
