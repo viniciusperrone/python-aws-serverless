@@ -75,3 +75,62 @@ def add_ingress_rules(sg_id: str):
 sg_id = get_sg_id()
 
 add_ingress_rules(sg_id)
+
+# Get path of target file
+
+filename_target = 'wp_user_data.sh'
+path_file_target = os.path.join(os.path.dirname(__file__), 'commands', filename_target)
+
+file_user_data = open(path_file_target, 'r')
+
+user_data = file_user_data.read()
+
+file_user_data.close()
+
+print('user_data', user_data)
+
+try:
+    response_ec2 = client_ec2.run_instances(
+        BlockDeviceMappings=[
+            {
+                'DeviceName': '/dev/sda1',
+                'Ebs': {
+                    'VolumeSize': 8,
+                    'DeleteOnTermination': True,
+                    'VolumeType': 'gp2',
+                    'Encrypted': False
+                }
+            }
+        ],
+        UserData=user_data,
+        ImageId=ami_id,
+        MaxCount=1,
+        MinCount=1,
+        InstanceType='t2.micro',
+        KeyName=key_pair,
+        Monitoring={
+            'Enabled': False
+        },
+        SecurityGroup=[sg_id],
+        SubnetId=subnet_id,
+        InstanceInitiatedShutdownBehavior='terminate',
+        TagSpecifications=[
+            {
+                'ResourceType': 'instance',
+                'Tags': [
+                    {
+                        'Key': 'Name',
+                        'Value': 'wp-course-python'
+                    },
+                    {
+                        'Key': 'Environment',
+                        'Value': 'development'
+                    }
+                ]
+            }
+        ]
+    )
+
+    print(response_ec2)
+except Exception as err:
+    print(err)
