@@ -87,8 +87,6 @@ user_data = file_user_data.read()
 
 file_user_data.close()
 
-print('user_data', user_data)
-
 try:
     response_ec2 = client_ec2.run_instances(
         BlockDeviceMappings=[
@@ -111,7 +109,7 @@ try:
         Monitoring={
             'Enabled': False
         },
-        SecurityGroup=[sg_id],
+        SecurityGroups=[sg_id],
         SubnetId=subnet_id,
         InstanceInitiatedShutdownBehavior='terminate',
         TagSpecifications=[
@@ -131,6 +129,6 @@ try:
         ]
     )
 
-    print(response_ec2)
+    print("response_ec2: ", response_ec2)
 except Exception as err:
     print(err)
