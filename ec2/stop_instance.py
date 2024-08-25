@@ -23,7 +23,7 @@ try:
             {
                 'Name': 'instance-state-name',
                 'Values': [
-                    'running',
+                    'running'
                 ]
             },
         ]
@@ -35,3 +35,8 @@ except Exception as e:
     instance_id = None
 
     print(e)
+
+if instance_id is not None:
+    response = client_ec2.stop_instances(InstanceIds=[instance_id])
+
+    print(response)
