@@ -75,9 +75,9 @@ def add_ingress_rules(sg_id: str):
 
 sg_id = get_sg_id()
 
-# add_ingress_rules(sg_id)
-# Get path of target file
+add_ingress_rules(sg_id)
 
+# Get path of target file
 filename_target = 'wp_user_data.sh'
 path_file_target = os.path.join(os.path.dirname(__file__), 'commands', filename_target)
 
