@@ -29,14 +29,19 @@ try:
         ]
     )
 
-    instance_id = response_instances['Reservations'][0]['Instances'][0]['InstanceId']
+
+    instance_ids = [
+        instance['InstanceId']
+        for reservation in response_instances['Reservations']
+        for instance in reservation['Instances']
+    ]
+
+    print(instance_ids)
 
 except Exception as e:
-    instance_id = None
+    instance_ids = None
 
     print(e)
 
-if instance_id is not None:
-    response = client_ec2.stop_instances(InstanceIds=[instance_id])
-
-    print(response)
+if instance_ids is not None:
+    response = client_ec2.stop_instances(InstanceIds=instance_ids)
