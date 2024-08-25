@@ -66,6 +66,7 @@ def add_ingress_rules(sg_id: str):
                 }
             ]
         )
+
     except Exception as err:
         print(err)
 
@@ -74,8 +75,7 @@ def add_ingress_rules(sg_id: str):
 
 sg_id = get_sg_id()
 
-add_ingress_rules(sg_id)
-
+# add_ingress_rules(sg_id)
 # Get path of target file
 
 filename_target = 'wp_user_data.sh'
@@ -109,7 +109,7 @@ try:
         Monitoring={
             'Enabled': False
         },
-        SecurityGroups=[sg_id],
+        SecurityGroupIds=[sg_id],
         SubnetId=subnet_id,
         InstanceInitiatedShutdownBehavior='terminate',
         TagSpecifications=[
