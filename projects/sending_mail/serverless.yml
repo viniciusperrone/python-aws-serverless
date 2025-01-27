@@ -44,7 +44,7 @@ custom:
   serverless-s3-cleaner:
     prompt: false
     buckets:
-      - ${self:custom:bucketName}
+      - ${self:custom.bucketName}
 
 plugins:
   - serverless-s3-cleaner
