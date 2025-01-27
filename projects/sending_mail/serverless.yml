@@ -14,24 +14,30 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - s3:SendMail
+            - ses:SendMail
           Resource:
             - arn:aws:ses:${self:provider.region}:*:identity/*
         - Effect: Allow
           Action:
             - s3:GetObject
           Resource:
-            - arn:aws:s3:::${self:custom:bucketName}/*
+            - arn:aws:s3:::${self:custom.bucketName}/*
         - Effect: Allow
           Action:
             - s3:ListBucket
           Resource:
-            - arn:aws:s3:::${self:custom:bucketName}/*
+            - arn:aws:s3:::${self:custom.bucketName}/*
 
 
 functions:
   send-mail:
     handler: handler.send_mail
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:Put
+          rules:
+            - suffix: .csv
 
 custom:
   bucketName: envio-email-projeto2

@@ -14,5 +14,123 @@
     "serviceProviderAwsCfStackUpdated": null,
     "serviceProviderAwsCfStackStatus": null,
     "serviceProviderAwsCfStackOutputs": null
+  },
+  "C:\\Users\\Vinicius\\workspace\\python-aws-serverless\\projects\\sending_mail": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.19",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeServiceName": null,
+    "servicePath": "C:\\Users\\Vinicius\\workspace\\python-aws-serverless\\projects\\sending_mail",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "serverless",
+      "frameworkVersion": "4",
+      "provider": {
+        "name": "aws",
+        "runtime": "python3.12",
+        "profile": "automation-course",
+        "region": "us-east-1",
+        "stage": "dev",
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:SendMail"
+                ],
+                "Resource": [
+                  "arn:aws:ses:us-east-1:*:identity/*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:GetObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::${self:custom:bucketName}/*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:ListBucket"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::${self:custom:bucketName}/*"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "functions": {
+        "send-mail": {
+          "handler": "handler.send_mail",
+          "events": [
+            {
+              "s3": {
+                "bucket": "envio-email-projeto2",
+                "event": "s3:ObjectCreated:Put",
+                "rules": [
+                  {
+                    "suffix": ".csv"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "custom": {
+        "bucketName": "envio-email-projeto2",
+        "serverless-s3-cleaner": {
+          "prompt": false,
+          "buckets": [
+            "${self:custom:bucketName}"
+          ]
+        }
+      },
+      "plugins": [
+        "serverless-s3-cleaner"
+      ]
+    },
+    "serviceRawFile": "# \"service\" is the name of this project. This will also be added to your AWS resource names.\nservice: serverless\n\nframeworkVersion: '4'\n\nprovider:\n  name: aws\n  runtime: python3.12\n  profile: automation-course\n  region: us-east-1\n  stage: dev\n  iam:\n    role:\n      statements:\n        - Effect: Allow\n          Action:\n            - s3:SendMail\n          Resource:\n            - arn:aws:ses:${self:provider.region}:*:identity/*\n        - Effect: Allow\n          Action:\n            - s3:GetObject\n          Resource:\n            - arn:aws:s3:::${self:custom:bucketName}/*\n        - Effect: Allow\n          Action:\n            - s3:ListBucket\n          Resource:\n            - arn:aws:s3:::${self:custom:bucketName}/*\n\n\nfunctions:\n  send-mail:\n    handler: handler.send_mail\n    events:\n      - s3:\n          bucket: ${self:custom.bucketName}\n          event: s3:ObjectCreated:Put\n          rules:\n            - suffix: .csv\n\ncustom:\n  bucketName: envio-email-projeto2\n  serverless-s3-cleaner:\n    prompt: false\n    buckets:\n      - ${self:custom:bucketName}\n\nplugins:\n  - serverless-s3-cleaner\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "error": {
+      "message": "custom resolver of provider self not found",
+      "stack": "Error: custom resolver of provider self not found\n    at #getResolver (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:51699)\n    at _ResolverManager.resolve (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:57206)\n    at #handlePlaceholderNode (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:55970)\n    at file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:53920\n    at processNodeAndHandleCompletion (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:44842)\n    at processNodeAndManagePromise (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:45480)\n    at file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:45297\n    at Array.forEach (<anonymous>)\n    at processSinks (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:45252)\n    at processGraphInParallel (file:///C:/Users/Vinicius/.serverless/releases/4.4.19/package/dist/sf-core.js:693:45095)",
+      "code": "RESOLVER_NOT_FOUND"
+    },
+    "machineId": "e334d796c7335902deebd6f8cf9b078b",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "f509b749-f52f-49f3-9f18-ba2d2364b13c",
+    "orgName": "viniciusperrone",
+    "userId": "GkQLsKg8WcxSQlG7Kh",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "viniciusperrone",
+    "subscription": null,
+    "userEmail": "perronevinicius2018@gmail.com",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
   }
 }
