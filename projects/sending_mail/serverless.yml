@@ -1,12 +1,44 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: viniciusperrone
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: sendingMail
+service: serverless
+
+frameworkVersion: '4'
 
 provider:
   name: aws
   runtime: python3.12
+  profile: automation-course
+  region: us-east-1
+  stage: dev
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:SendMail
+          Resource:
+            - arn:aws:ses:${self:provider.region}:*:identity/*
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+          Resource:
+            - arn:aws:s3:::${self:custom:bucketName}/*
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom:bucketName}/*
+
 
 functions:
-  hello:
-    handler: handler.hello
+  send-mail:
+    handler: handler.send_mail
+
+custom:
+  bucketName: envio-email-projeto2
+  serverless-s3-cleaner:
+    prompt: false
+    buckets:
+      - ${self:custom:bucketName}
+
+plugins:
+  - serverless-s3-cleaner
